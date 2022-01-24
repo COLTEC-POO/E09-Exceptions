@@ -8,12 +8,12 @@ public class ContaCorrente extends Conta implements ITaxas {
         calculaTaxas();
     }
 
-    public void setLimite (double limite){
-        if(limite<-100){
-            System.out.println("Ultrapassou o limite mínimo para este tipo de conta!");
+    public void setLimite (double valor) throws IllegalArgumentException {
+        if(valor<500 || valor>1000){
+            throw new IllegalArgumentException("Alteração não realizada!Valor de excedido!");
         }
         else{
-            this.limite=limite;
+            this.limite=valor;
             System.out.println("Limite alterado!");
         }
     }

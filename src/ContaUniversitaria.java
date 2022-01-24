@@ -5,12 +5,12 @@ public class ContaUniversitaria extends Conta implements ITaxas {
         super(dono, numConta);
     }
 
-    public void setLimite(double limite){
-        if(limite<0 || limite>500){
-            System.out.println("Não foi possível alterar o limite!Ultrapassou os valores de limite para este tipo de conta!");
+    public void setLimite(double valor)throws IllegalArgumentException{
+        if(valor<0 || valor>500){
+            throw new IllegalArgumentException("Alteração não realizada!Valor de excedido!");
         }
         else{
-            this.limite=limite;
+            this.limite=valor;
             System.out.println("Limite alterado!");
         }
     }

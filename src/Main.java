@@ -134,10 +134,6 @@ public class Main {
         //Tratamento de exceções
         //testes
         try{
-            //testando os limites das contas criadas
-            jonas.setLimite(500);
-            samuel.setLimite(500);
-            camila.setLimite(500);
 
             //depositando dinheiro na conta
             jonas.depositar(800);
@@ -156,15 +152,20 @@ public class Main {
 
 
             //testando depositar valores negativos
-            jonas.depositar(-50);
-            samuel.depositar(-35);
+            //jonas.depositar(-50);
+            //samuel.depositar(-35);
 
             //testando sacar valores negativos
-            sorvebao.sacar(-1);
-            samuel.sacar(-35);
+           // sorvebao.sacar(-1);
+            //samuel.sacar(-35);
 
             //testando sacar fora do limite
-            sorvebao.sacar(500000);
+            //sorvebao.sacar(500000);
+
+            //testando os limites das contas criadas
+            //conta corrente: limite entre 500 e 1000
+           jonas.setLimite(-50);
+
 
         }catch( ValorNegativoException e){
             System.out.println(e.getMessage());

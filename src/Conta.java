@@ -78,9 +78,8 @@ public abstract class Conta implements ITaxas {
         this.taxas = taxas;
     }
 
-    //-set limite com tratamento de exceção
-    public void setLimite(double limite) {
-        this.limite=limite;
+     public void setLimite(double valor) {
+        this.limite=valor;
     };
 
 

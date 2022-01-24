@@ -6,12 +6,12 @@ public class ContaPoupanca extends Conta implements ITaxas {
         super(dono, numConta);
     }
 
-    public void setLimite(double limite){
-        if(limite<100 || limite>1000){
-            System.out.println("Não foi possível alterar o limite!Ultrapassou os valores de limite para este tipo de conta!");
+    public void setLimite(double valor) throws IllegalArgumentException{
+        if(valor<100 || valor>1000){
+            throw new IllegalArgumentException("Alteração não realizada!Valor de excedido!");
         }
         else{
-            this.limite=limite;
+            this.limite=valor;
             System.out.println("Limite alterado!");
         }
     }
