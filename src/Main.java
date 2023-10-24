@@ -7,6 +7,7 @@ import Cliente.PessoaJuridica;
 import Conta.ContaCorrente;
 import Conta.ContaPoupanca;
 import Conta.ContaUniversitaria;
+import Exceptions.LimiteException;
 import Exceptions.NegativoException;
 
 // Importação de bibliotecas Java
@@ -21,6 +22,7 @@ public class Main {
         // Inicialização de dados
         PessoaFisica pF = new PessoaFisica("João", "Rua A", "12345678900", 30, 'M');
         ContaCorrente contaC = new ContaCorrente(1, "123", 20000, "João", 1000, pF);
+        contaC.setLimite(1000);
 
         List<Cliente> listaClientes = new ArrayList<>();
         listaClientes.add(pF);
@@ -33,10 +35,10 @@ public class Main {
 
         // Tratando a Exception
     try {
-        contaC.sacar(-300);
-        contaC.sacar(-200);
-        contaC.depositar(-3000);
-    } catch(NegativoException erro) {
+        contaC.sacar(1100);
+        contaC.sacar(200);
+        contaC.depositar(3000);
+    } catch(NegativoException | LimiteException erro) {
         System.out.println(erro.getMessage());
     }
 

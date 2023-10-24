@@ -1,6 +1,7 @@
 package Conta;
 
 import Cliente.Cliente;
+import Exceptions.LimiteException;
 import Exceptions.NegativoException;
 import Operacao.Operacao;
 import Operacao.OperacaoSaque;
@@ -67,7 +68,7 @@ public abstract class Conta implements ITaxas {
     public abstract void depositar(double valor) throws NegativoException;
 
     // Metodo abstrato para forçar subClasses a implementar
-    public abstract void sacar(double valor) throws NegativoException;
+    public abstract void sacar(double valor) throws NegativoException, LimiteException;
 
     // Metodo abstrato para forçar subClasses a implementar
     public abstract void imprimirExtrato(int tipoOrdenacao);

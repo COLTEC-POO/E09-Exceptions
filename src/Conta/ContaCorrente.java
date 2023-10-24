@@ -7,6 +7,7 @@ import Cliente.PessoaJuridica;
 
 // Operacoes
 
+import Exceptions.LimiteException;
 import Operacao.Operacao;
 import Operacao.OperacaoSaque;
 import Operacao.OperacaoDeposito;
@@ -42,22 +43,22 @@ public class ContaCorrente extends Conta implements ITaxas {
     }
 
     @Override
-    public void sacar(double valor) throws NegativoException  {
+    public void sacar(double valor) throws NegativoException, LimiteException {
         // Verifica se há operações antes de tentar acessar o array
         double taxa = 0;
         if (numOp > 0 && operacoes.get(numOp - 1) instanceof OperacaoSaque) {
             taxa = ((OperacaoSaque) operacoes.get(numOp - 1)).calculaTaxas();
         }
 
-        double saldoAtual = getSaldo();
-        if (valor > 0 && valor + taxa <= saldoAtual) {
+        double saldoAtual = getSaldo(); // Saldo disponível incluindo o limite
+
+        if (valor > 0 && valor + taxa <= saldoAtual && valor <= limite) {
             // Adiciona a taxa de saque ao saldo
             this.setSaldo(saldoAtual - valor - taxa);
             this.operacoes.add(new OperacaoSaque(valor));
             numOp++;
-        } else if (valor > saldoAtual){
-            System.out.println("Dinheiro indisponível, valor disponível: R$: " + saldoAtual);
-
+        } else if (valor > limite) {
+                throw new LimiteException(valor);
         } else {
             throw new NegativoException(valor);
         }
