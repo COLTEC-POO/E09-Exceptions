@@ -2,6 +2,9 @@ package Conta;
 
 import Cliente.Cliente;
 
+import Exceptions.LimiteException;
+import Exceptions.NegativoException;
+import Exceptions.setArgumentException;
 import Operacao.Operacao;
 import Operacao.OperacaoDeposito;
 import Operacao.OperacaoSaque;
@@ -13,24 +16,30 @@ import java.util.List;
 
 public class ContaUniversitaria extends Conta {
 
-    public ContaUniversitaria(int numero, String senha, double saldo, String dono, double limite, Cliente cliente) {
+    public ContaUniversitaria(int numero, String senha, double saldo, String dono, double limite, Cliente cliente) throws setArgumentException {
         super(numero, senha, saldo, dono, limite, cliente);
-        setLimite(limite);
+
+        try {
+            setLimite(limite);
+        } catch (setArgumentException erro) {
+            System.out.println(erro.getMessage());
+        }
     }
 
     @Override
-    public void sacar(double valor) {
+    public void sacar(double valor) throws LimiteException, NegativoException {
         double saldoAtual = getSaldo();
 
-        if (valor >= 0 && valor <= saldoAtual) {
-            this.setSaldo(saldoAtual - valor);
-
-            this.operacoes.add(new OperacaoSaque(valor));
-
-            numOp++;
-        } else {
-            System.out.println("Dinheiro indisponivel, valor disponivel: R$: " + saldoAtual);
-        }
+            if (valor > 0 && valor <= saldoAtual && valor <= limite) {
+                // Adiciona a taxa de saque ao saldo
+                this.setSaldo(saldoAtual - valor);
+                this.operacoes.add(new OperacaoSaque(valor));
+                numOp++;
+            } else if (valor > limite) {
+                throw new LimiteException(valor);
+            } else {
+                throw new NegativoException(valor);
+            }
     }
 
     @Override
@@ -72,15 +81,14 @@ public class ContaUniversitaria extends Conta {
     }
 
     @Override
-    public double setLimite(double valor) {
-//            Limite máximo de 1000 reais, e limite mínimo de 100 reais.
+    public double setLimite(double valor) throws setArgumentException {
+//            Limite máximo de 500 reais, e limite mínimo de 0 reais.
         if (valor >= 0 && valor <= 500) {
             return this.limite = valor;
 
         } else {
-            System.out.println("Limite máximo de 1000 reais e mínimo de 100 reais");
+            throw new setArgumentException("ERRO: Limite deve estar entre 0 e 500. Limite inserido: ", valor);
         }
-        return 0;
     }
 
     @Override

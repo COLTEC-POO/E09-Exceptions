@@ -2,6 +2,9 @@ package Conta;
 
 import Cliente.Cliente;
 
+import Exceptions.LimiteException;
+import Exceptions.NegativoException;
+import Exceptions.setArgumentException;
 import Operacao.Operacao;
 import Operacao.OperacaoDeposito;
 import Operacao.OperacaoSaque;
@@ -13,9 +16,14 @@ import java.util.List;
 
 public class ContaPoupanca extends Conta {
 
-    public ContaPoupanca(int numero, String senha, double saldo, String dono, double limite, Cliente cliente) {
+    public ContaPoupanca(int numero, String senha, double saldo, String dono, double limite, Cliente cliente) throws setArgumentException {
         super(numero, senha, saldo, dono, limite, cliente);
-        setLimite(limite);
+
+        try {
+            setLimite(limite);
+        } catch (setArgumentException erro) {
+            System.out.println(erro.getMessage());
+        }
     }
 
     public double calculaTaxas() {
@@ -23,26 +31,20 @@ public class ContaPoupanca extends Conta {
     }
 
     @Override
-    public void sacar(double valor) {
+    public void sacar(double valor) throws LimiteException, NegativoException {
         double saldoAtual = getSaldo();
 
-        if (valor >= 0 && valor <= saldoAtual) {
-            double taxa = 0;
-            // Verifica se há operações antes de tentar acessar o array
-            if (numOp > 0 && operacoes instanceof OperacaoSaque) {
-                taxa = ((OperacaoSaque) operacoes).calculaTaxas() * valor;
+            if (valor > 0 && valor <= saldoAtual && valor <= limite) {
+                // Adiciona a taxa de saque ao saldo
+                this.setSaldo(saldoAtual - valor);
+                this.operacoes.add(new OperacaoSaque(valor));
+                numOp++;
+            } else if (valor > limite) {
+                throw new LimiteException(valor);
+            } else {
+                throw new NegativoException(valor);
             }
-
-            // Adiciona a taxa de saque ao saldo
-            this.setSaldo(saldoAtual - valor - taxa);
-
-            this.operacoes.add(new OperacaoSaque(valor));
-
-            numOp++; // Incrementa numOp após adicionar a operação
-        } else {
-            System.out.println("Dinheiro indisponível, valor disponível: R$: " + saldoAtual);
         }
-    }
 
     @Override
     public void depositar(double valor) {
@@ -83,13 +85,12 @@ public class ContaPoupanca extends Conta {
     }
 
     @Override
-    public double setLimite(double valor) {
+    public double setLimite(double valor) throws setArgumentException {
 //            Limite máximo de 1000 reais, e limite mínimo de 100 reais.
         if (valor >= 100 && valor <= 1000) {
             return this.limite = valor;
         } else {
-            System.out.println("Limite mínimo de 100 reais e máximo de 1000");
+            throw new setArgumentException("ERRO: Limite deve estar entre 100 e 1000. Limite inserido: ", valor);
         }
-        return 0;
     }
 }

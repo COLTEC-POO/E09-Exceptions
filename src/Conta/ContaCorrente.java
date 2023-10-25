@@ -8,6 +8,7 @@ import Cliente.PessoaJuridica;
 // Operacoes
 
 import Exceptions.LimiteException;
+import Exceptions.setArgumentException;
 import Operacao.Operacao;
 import Operacao.OperacaoSaque;
 import Operacao.OperacaoDeposito;
@@ -26,9 +27,15 @@ import java.util.List;
 
 public class ContaCorrente extends Conta implements ITaxas {
 
-    public ContaCorrente(int numero, String senha, double saldo, String dono, double limite, Cliente cliente) {
+    public ContaCorrente(int numero, String senha, double saldo, String dono, double limite, Cliente cliente) throws setArgumentException {
         super(numero, senha, saldo, dono, limite, cliente);
-        setLimite(limite);
+
+        try {
+            setLimite(limite);
+        } catch (setArgumentException erro) {
+            System.out.println(erro.getMessage());
+        }
+
     }
 
     @Override
@@ -106,12 +113,13 @@ public class ContaCorrente extends Conta implements ITaxas {
     }
 
     @Override
-    public double setLimite(double valor) {
+    public double setLimite(double valor) throws setArgumentException {
+//      Limite mínimo de -100 reais.
         if (valor >= -100) {
-            return this.limite = valor;
+            this.limite = valor;
+            return this.limite;
         } else {
-            System.out.println("Limite mínimo de -100 reais");
+            throw new setArgumentException("ERRO: Limite mínimo de R$: -100. Limite inserido: ", valor);
         }
-        return 0;
     }
 }

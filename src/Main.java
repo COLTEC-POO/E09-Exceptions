@@ -9,6 +9,7 @@ import Conta.ContaPoupanca;
 import Conta.ContaUniversitaria;
 import Exceptions.LimiteException;
 import Exceptions.NegativoException;
+import Exceptions.setArgumentException;
 
 // Importação de bibliotecas Java
 import java.util.List;
@@ -17,12 +18,11 @@ import java.util.ArrayList;
 
 public class Main {
 
-    public static void main(String[] args) throws NegativoException {
+    public static void main(String[] args) throws setArgumentException {
 
         // Inicialização de dados
         PessoaFisica pF = new PessoaFisica("João", "Rua A", "12345678900", 30, 'M');
-        ContaCorrente contaC = new ContaCorrente(1, "123", 20000, "João", 1000, pF);
-        contaC.setLimite(1000);
+        ContaPoupanca contaC = new ContaPoupanca(1, "123", 20000, "João", 1001, pF);
 
         List<Cliente> listaClientes = new ArrayList<>();
         listaClientes.add(pF);
@@ -35,7 +35,7 @@ public class Main {
 
         // Tratando a Exception
     try {
-        contaC.sacar(1100);
+        contaC.sacar(100);
         contaC.sacar(200);
         contaC.depositar(3000);
     } catch(NegativoException | LimiteException erro) {

@@ -3,6 +3,7 @@ package Conta;
 import Cliente.Cliente;
 import Exceptions.LimiteException;
 import Exceptions.NegativoException;
+import Exceptions.setArgumentException;
 import Operacao.Operacao;
 import Operacao.OperacaoSaque;
 import Operacao.OperacaoDeposito;
@@ -34,7 +35,7 @@ public abstract class Conta implements ITaxas {
     int tipoOrdenacao;
 
     // Construtor da Conta
-    public Conta(int numero, String senha, double saldo, String dono, double limite, Cliente cliente) {
+    public Conta(int numero, String senha, double saldo, String dono, double limite, Cliente cliente) throws setArgumentException {
         this.numero = numero;
         this.senha = senha;
         this.saldo = saldo;
@@ -42,7 +43,7 @@ public abstract class Conta implements ITaxas {
 
         this.cliente = cliente;
 
-        this.limite = limite;
+        setLimite(limite);
 
         this.operacoes = new ArrayList<>();
 
@@ -73,7 +74,7 @@ public abstract class Conta implements ITaxas {
     // Metodo abstrato para forçar subClasses a implementar
     public abstract void imprimirExtrato(int tipoOrdenacao);
 
-    public abstract double setLimite(double valor);
+    public abstract double setLimite(double valor) throws setArgumentException;
 
     public double getSaldo() {
         return this.saldo;
